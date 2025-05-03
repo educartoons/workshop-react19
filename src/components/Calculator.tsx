@@ -6,14 +6,19 @@ import Button from "./Button";
 
 const RATE = 0.8839;
 
+// Ciclos de vida de un componente de ReactJS (useEffect)
+// useMemo, useCallback, memo
+// Portals
+// custom hooks
+
 function Calculator() {
   const [amount1, setAmount1] = useState<string>("1000");
   const [amount2, setAmount2] = useState<string>(String(1000 * RATE));
+  const [displayModal, setDisplayModal] = useState(false);
 
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    console.log("hey");
+  const handleShowModal = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    alert("Comparar comisiones");
+    setDisplayModal(true);
   };
 
   return (
@@ -45,11 +50,43 @@ function Calculator() {
           source="final"
         />
       </div>
-      <div className="flex justify-between mt-10">
-        <Button onClick={handleClick} variant="outlined">
+      <div className="flex gap-2 mt-10">
+        <Button onClick={handleShowModal} variant="outlined">
           Compara comisiones
         </Button>
-        <Button variant="solid">Envía dinero</Button>
+        <div className="grow">
+          <Button variant="solid" width="full">
+            Envía dinero
+          </Button>
+        </div>
+        {displayModal === true ? (
+          <div className="fixed inset-0">
+            <div className="fixed inset-0 bg-black opacity-30 z-10"></div>
+            <div className="w-1/2 h-1/2 bg-white relative z-20 rounded-lg translate-1/2 p-10">
+              <h2 className="font-semibold">
+                Ahorra en sobreprecios en el tipo de cambio
+              </h2>
+              <p>
+                El coste de tu transferencia se basa en la comisión y en el tipo
+                de cambio. Muchos grandes bancos comerciales ofrecen
+                transferencias "sin comisiones", pero en realidad ocultan un
+                sobreprecio en el tipo de cambio y acabas pagando más.
+              </p>
+              <p>
+                En Wise, nunca haremos eso. Solo usamos el tipo de cambio medio
+                del mercado y mostramos nuestras comisiones por adelantado. Esta
+                tabla compara las comisiones que realmente pagarías al enviar
+                dinero con los bancos y proveedores más populares, y con
+                nosotros.
+              </p>
+              <div className="mt-4">
+                <Button onClick={() => setDisplayModal(false)} variant="solid">
+                  Close
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     </form>
   );
