@@ -1,4 +1,4 @@
-import { ChangeEvent, memo, MouseEvent, useEffect, useState } from "react";
+import { memo, MouseEvent, useState } from "react";
 import { LockKeyhole } from "lucide-react";
 import Input from "./Input";
 import Badge from "./Badge";
@@ -8,11 +8,7 @@ import { createPortal } from "react-dom";
 
 const RATE = 0.8839;
 
-interface CalculatorProps {
-  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
-}
-
-function Calculator(props: CalculatorProps) {
+function Calculator() {
   const [amount1, setAmount1] = useState<string>("1000");
   const [amount2, setAmount2] = useState<string>(String(1000 * RATE));
   const [displayModal, setDisplayModal] = useState(false);
@@ -21,12 +17,6 @@ function Calculator(props: CalculatorProps) {
     event.preventDefault();
     setDisplayModal(true);
   };
-
-  useEffect(() => {
-    console.log("Call to useEffect");
-  }, []);
-
-  console.log("rendering calculator");
 
   return (
     <form className="w-full p-10 rounded-xl shadow-[0_10px_32px_0_rgba(0,0,0,0.15),0_40px_40px_0_rgba(0,0,0,0.04)]">
