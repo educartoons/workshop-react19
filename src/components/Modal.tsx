@@ -1,13 +1,12 @@
-import { useEffect, useRef, MouseEvent } from "react";
+import { useEffect, RefObject } from "react";
 import Button from "./Button";
 
 interface ModalProps {
   onClose: () => void;
+  modalRef: RefObject<HTMLElement | null>;
 }
 
-function Modal({ onClose }: ModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null);
-
+function Modal({ onClose, modalRef }: ModalProps) {
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Escape") {
       console.log("executing onClose function");
@@ -15,18 +14,10 @@ function Modal({ onClose }: ModalProps) {
     }
   };
 
-  const handleClick = (event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      onClose();
-    }
-  };
-
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("click", handleClick, true);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("click", handleClick, true);
     };
   }, []);
 

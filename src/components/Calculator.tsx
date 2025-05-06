@@ -1,21 +1,23 @@
-import { memo, MouseEvent, useRef, useState } from "react";
+import { memo, MouseEvent, useState } from "react";
 import { LockKeyhole } from "lucide-react";
 import Input from "./Input";
 import Badge from "./Badge";
 import Button from "./Button";
 import Modal from "./Modal";
 import { createPortal } from "react-dom";
+import useClickOutside from "../hooks/useClickoutside";
 
 const RATE = 0.8839;
 
 function Calculator() {
   const [amount1, setAmount1] = useState<string>("1000");
   const [amount2, setAmount2] = useState<string>(String(1000 * RATE));
-  const [displayModal, setDisplayModal] = useState(false);
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useClickOutside(false);
 
   const handleShowModal = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setDisplayModal(true);
+    setIsComponentVisible(true);
   };
 
   return (
@@ -56,9 +58,12 @@ function Calculator() {
             Envía dinero
           </Button>
         </div>
-        {displayModal === true
+        {isComponentVisible === true
           ? createPortal(
-              <Modal onClose={() => setDisplayModal(false)} />,
+              <Modal
+                modalRef={ref}
+                onClose={() => setIsComponentVisible(false)}
+              />,
               document.getElementById("root")!
             )
           : null}
