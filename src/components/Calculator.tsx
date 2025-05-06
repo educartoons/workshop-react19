@@ -1,4 +1,4 @@
-import { memo, MouseEvent, useState } from "react";
+import { memo, MouseEvent, useRef, useState } from "react";
 import { LockKeyhole } from "lucide-react";
 import Input from "./Input";
 import Badge from "./Badge";

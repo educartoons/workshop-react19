@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, MouseEvent } from "react";
 import Button from "./Button";
 
 interface ModalProps {
@@ -6,6 +6,8 @@ interface ModalProps {
 }
 
 function Modal({ onClose }: ModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Escape") {
       console.log("executing onClose function");
@@ -13,18 +15,28 @@ function Modal({ onClose }: ModalProps) {
     }
   };
 
+  const handleClick = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      onClose();
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
-    // clean up
+    document.addEventListener("click", handleClick, true);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("click", handleClick, true);
     };
   }, []);
 
   return (
     <div className="fixed inset-0">
       <div className="fixed inset-0 bg-black opacity-30 z-10"></div>
-      <div className="w-1/2 h-1/2 bg-white relative z-20 rounded-lg translate-1/2 p-10">
+      <div
+        ref={modalRef}
+        className="w-1/2 h-1/2 bg-white relative z-20 rounded-lg translate-1/2 p-10"
+      >
         <h2 className="font-semibold">
           Ahorra en sobreprecios en el tipo de cambio
         </h2>
