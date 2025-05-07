@@ -1,6 +1,7 @@
-import { useEffect, useReducer, useState } from "react";
+import { useReducer } from "react";
 import Card from "./Card";
 import Button from "./Button";
+import useFetch from "../hooks/useFetch";
 
 export interface IPokemon {
   name: string;
@@ -44,23 +45,16 @@ function reducer(state: IState, action: IAction) {
 }
 
 export default function Pokedex() {
-  const [data, setData] = useState<IPokemon | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, {
     value: 1,
   });
-
-  const fetchPokemon = async () => {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${state.value}`
-    );
-    if (response.ok) {
-      const data = await response.json();
-      setData(data);
-    } else {
-      setError("Error");
-    }
-  };
+  const { data, error } = useFetch<{
+    data: IPokemon | undefined;
+    error: string | undefined;
+  }>(`https://pokeapi.co/api/v2/pokemon/${state.value}`, {
+    data: undefined,
+    error: undefined,
+  });
 
   const handlePrev = () => {
     if (state.value - 1 > 0) {
@@ -76,10 +70,6 @@ export default function Pokedex() {
       payload: 10,
     });
   };
-
-  useEffect(() => {
-    fetchPokemon();
-  }, [state.value]);
 
   return (
     <div>
