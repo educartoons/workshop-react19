@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Card from "./Card";
 import Button from "./Button";
 
@@ -13,14 +13,46 @@ export interface IPokemon {
   };
 }
 
+interface IState {
+  value: number;
+}
+
+interface IAction {
+  type: "next" | "prev" | "sum";
+  payload?: number;
+}
+
+function reducer(state: IState, action: IAction) {
+  console.log(action);
+  switch (action.type) {
+    case "next":
+      return {
+        value: state.value + 1,
+      };
+    case "prev":
+      return {
+        value: state.value - 1,
+      };
+    case "sum":
+      return {
+        value: state.value + action.payload!,
+      };
+    default:
+      break;
+  }
+  return state;
+}
+
 export default function Pokedex() {
-  const [pokemonId, setPokemonId] = useState(1);
   const [data, setData] = useState<IPokemon | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [state, dispatch] = useReducer(reducer, {
+    value: 1,
+  });
 
   const fetchPokemon = async () => {
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemonId}`
+      `https://pokeapi.co/api/v2/pokemon/${state.value}`
     );
     if (response.ok) {
       const data = await response.json();
@@ -31,18 +63,23 @@ export default function Pokedex() {
   };
 
   const handlePrev = () => {
-    if (pokemonId - 1 > 0) {
-      setPokemonId(pokemonId - 1);
+    if (state.value - 1 > 0) {
+      dispatch({
+        type: "prev",
+      });
     }
   };
 
   const handleNext = () => {
-    setPokemonId(pokemonId + 1);
+    dispatch({
+      type: "sum",
+      payload: 10,
+    });
   };
 
   useEffect(() => {
     fetchPokemon();
-  }, [pokemonId]);
+  }, [state.value]);
 
   return (
     <div>
