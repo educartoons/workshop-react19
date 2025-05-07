@@ -25,7 +25,7 @@ function Modal({ onClose, modalRef }: ModalProps) {
     <div className="fixed inset-0">
       <div className="fixed inset-0 bg-black opacity-30 z-10"></div>
       <div
-        ref={modalRef}
+        ref={modalRef as RefObject<HTMLDivElement>}
         className="w-1/2 h-1/2 bg-white relative z-20 rounded-lg translate-1/2 p-10"
       >
         <h2 className="font-semibold">
