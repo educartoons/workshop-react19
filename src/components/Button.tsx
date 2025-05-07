@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { ButtonHTMLAttributes } from "react";
 
 const button = cva(
-  "font-medium text-[16px] transition-colors cursor-pointer rounded-full py-3 block px-8",
+  "font-medium text-[16px] text-black transition-colors cursor-pointer rounded-full py-3 block px-8",
   {
     variants: {
       variant: {
